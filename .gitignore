@@ -1,0 +1,4 @@
+*.o
+*.so
+tests/parse
+tests/*.log
