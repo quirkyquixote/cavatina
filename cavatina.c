@@ -2,7 +2,6 @@
 #include "cavatina.h"
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
 int kv_parse_group(struct kv_parser *parser, const char **buf);
@@ -65,35 +64,35 @@ int kv_parse(struct kv_parser *parser, const char *buf)
 	}
 }
 
-int kv_strcmp(struct kv_str *s1, struct kv_str *s2)
+int kv_strcmp(struct kv_str s1, struct kv_str s2)
 {
 	int l1, l2;
-	l1 = s1->end - s1->begin;
-	l2 = s2->end - s2->begin;
+	l1 = s1.end - s1.begin;
+	l2 = s2.end - s2.begin;
 	if (l2 < l1)
 		l1 = l2;
-	return strncmp(s1->begin, s2->begin, l1);
+	return strncmp(s1.begin, s2.begin, l1);
 }
 
-struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str *name)
+struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str name)
 {
 	struct kv_group *group;
 	group = parser->first_group;
 	while (group != NULL) {
-		if (kv_strcmp(&group->name, name) == 0)
+		if (kv_strcmp(group->name, name) == 0)
 			return group;
 		group = group->next;
 	}
 	return NULL;
 }
 
-struct kv_group *kv_add_group(struct kv_parser *parser, struct kv_str *name)
+struct kv_group *kv_add_group(struct kv_parser *parser, struct kv_str name)
 {
 	struct kv_group *group;
 	group = kv_get_group(parser, name);
 	if (group == NULL) {
 		group = calloc(1, sizeof(*group));
-		group->name = *name;
+		group->name = name;
 		if (parser->last_group)
 			parser->last_group->next = group;
 		else
@@ -103,25 +102,25 @@ struct kv_group *kv_add_group(struct kv_parser *parser, struct kv_str *name)
 	return group;
 }
 
-struct kv_key *kv_get_key(struct kv_group *group, struct kv_str *name)
+struct kv_key *kv_get_key(struct kv_group *group, struct kv_str name)
 {
 	struct kv_key *key;
 	key = group->first_key;
 	while (key != NULL) {
-		if (kv_strcmp(&key->name, name) == 0)
+		if (kv_strcmp(key->name, name) == 0)
 			return key;
 		key = key->next;
 	}
 	return NULL;
 }
 
-struct kv_key *kv_add_key(struct kv_group *group, struct kv_str *name)
+struct kv_key *kv_add_key(struct kv_group *group, struct kv_str name)
 {
 	struct kv_key *key;
 	key = kv_get_key(group, name);
 	if (key == NULL) {
 		key = calloc(1, sizeof(*key));
-		key->name = *name;
+		key->name = name;
 		if (group->last_key)
 			group->last_key->next = key;
 		else
@@ -131,25 +130,25 @@ struct kv_key *kv_add_key(struct kv_group *group, struct kv_str *name)
 	return key;
 }
 
-struct kv_val *kv_get_val(struct kv_key *key, struct kv_str *name)
+struct kv_val *kv_get_val(struct kv_key *key, struct kv_str name)
 {
 	struct kv_val *val;
 	val = key->first_val;
 	while (val != NULL) {
-		if (kv_strcmp(&val->name, name) == 0)
+		if (kv_strcmp(val->name, name) == 0)
 			return val;
 		val = val->next;
 	}
 	return NULL;
 }
 
-struct kv_val *kv_add_val(struct kv_key *key, struct kv_str *name)
+struct kv_val *kv_add_val(struct kv_key *key, struct kv_str name)
 {
 	struct kv_val *val;
 	val = kv_get_val(key, name);
 	if (val == NULL) {
 		val = calloc(1, sizeof(*val));
-		val->name = *name;
+		val->name = name;
 		if (key->last_val)
 			key->last_val->next = val;
 		else
@@ -170,7 +169,7 @@ int kv_parse_group(struct kv_parser *parser, const char **buf)
 		return -1;
 	}
 	*buf = str.end + 1;
-	parser->cur_group = kv_add_group(parser, &str);
+	parser->cur_group = kv_add_group(parser, str);
 	return 0;
 }
 
@@ -198,7 +197,7 @@ int kv_parse_key(struct kv_parser *parser, const char **buf)
 	while (strchr(" \t\n\r=", *str.end) == NULL)
 		++str.end;
 	*buf = str.end;
-	parser->cur_key = kv_add_key(parser->cur_group, &str);
+	parser->cur_key = kv_add_key(parser->cur_group, str);
 	return 0;
 }
 
@@ -218,7 +217,7 @@ int kv_parse_val(struct kv_parser *parser, const char **buf)
 	str.begin = *buf;
 	str.end = strchr(str.begin, '\n');
 	*buf = str.end + 1;
-	parser->cur_val = kv_add_val(parser->cur_key, &str);
+	parser->cur_val = kv_add_val(parser->cur_key, str);
 	return 0;
 }
 

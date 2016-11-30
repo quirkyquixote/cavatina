@@ -2,6 +2,8 @@
 #ifndef CAVATINA_H_
 #define CAVATINA_H_
 
+#include <string.h>
+
 /*
  * A string: references a slice of a larger text.
  */
@@ -62,33 +64,43 @@ void kv_destroy(struct kv_parser *parser);
  */
 int kv_parse(struct kv_parser *parser, const char *buf);
 /*
+ * Create kv_str from C string
+ */
+static inline struct kv_str kv_str(const char *str)
+{
+	struct kv_str s;
+	s.begin = str;
+	s.end = str + strlen(str);
+	return s;
+}
+/*
  * Compare strings
  */
-int kv_strcmp(struct kv_str *s1, struct kv_str *s2);
+int kv_strcmp(struct kv_str s1, struct kv_str s2);
 /*
  * Get group named name, or NULL
  */
-struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str *name);
+struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str name);
 /*
  * Get group named name; create it if it doesn't exist
  */
-struct kv_group *kv_add_group(struct kv_parser *parser, struct kv_str *name);
+struct kv_group *kv_add_group(struct kv_parser *parser, struct kv_str name);
 /*
  * Get key named name, or NULL
  */
-struct kv_key *kv_get_key(struct kv_group *group, struct kv_str *name);
+struct kv_key *kv_get_key(struct kv_group *group, struct kv_str name);
 /*
  * Get key named name; create it if it doesn't exist
  */
-struct kv_key *kv_add_key(struct kv_group *group, struct kv_str *name);
+struct kv_key *kv_add_key(struct kv_group *group, struct kv_str name);
 /*
  * Get value named name, or NULL
  */
-struct kv_val *kv_get_val(struct kv_key *key, struct kv_str *name);
+struct kv_val *kv_get_val(struct kv_key *key, struct kv_str name);
 /*
  * Get value named name; create it if it doesn't exist
  */
-struct kv_val *kv_add_val(struct kv_key *key, struct kv_str *name);
+struct kv_val *kv_add_val(struct kv_key *key, struct kv_str name);
 /*
  * Dump all parsed data to stdout
  */
