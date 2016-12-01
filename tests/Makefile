@@ -2,6 +2,7 @@
 include ../config.mk
 
 OBJS += parse.o
+OBJS += list.o
 
 PROGRAMS = $(OBJS:.o:)
 DEPS = $(OBJS:.o=.d)
@@ -19,6 +20,7 @@ clean:
 	$(RM) $(LOGS)
 
 parse: parse.o ../cavatina.o
+list: list.o ../cavatina.o
 
 %.log: %
 	$(QUIET_GEN)./$< > $@ 2>&1

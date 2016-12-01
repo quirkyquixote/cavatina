@@ -156,45 +156,15 @@ void kv_dump(struct kv_parser *parser);
 /*
  * Initialize list
  */
-static inline void kv_list_init(struct kv_list *list)
-{
-	list->first = NULL;
-	list->last = NULL;
-}
+void kv_list_init(struct kv_list *list);
 /* 
  * Append node to list
  */
-static inline void kv_list_add(struct kv_list *list, struct kv_node *node)
-{
-	if (list->first == NULL)
-		list->first = node;
-	else
-		list->last->next = node;
-	list->last = node;
-}
+void kv_list_add(struct kv_list *list, struct kv_node *node);
 /*
  * Remove node from list
  */
-static inline int kv_list_remove(struct kv_list *list, struct kv_node *node)
-{
-	struct kv_node *prev = NULL;
-	if (node == list->first) {
-		list->first = node->next;
-	} else {
-		prev = list->first;
-		for (;;) {
-			if (prev == NULL)
-				return -1;
-			if (prev->next == node)
-				break;
-			prev = prev->next;
-		}
-		prev->next = node;
-	}
-	if (prev == list->last)
-		list->last = node;
-	return 0;
-}
+int kv_list_remove(struct kv_list *list, struct kv_node *node);
 /*
  * Iterate on list
  */

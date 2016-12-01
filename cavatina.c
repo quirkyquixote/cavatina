@@ -340,3 +340,39 @@ void kv_dump_str(struct kv_str str)
 	for (p = str.begin; p != str.end; ++p)
 		putchar(*p);
 }
+
+void kv_list_init(struct kv_list *list)
+{
+	list->first = NULL;
+	list->last = NULL;
+}
+
+void kv_list_add(struct kv_list *list, struct kv_node *node)
+{
+	if (list->first == NULL)
+		list->first = node;
+	else
+		list->last->next = node;
+	list->last = node;
+	node->next = NULL;
+}
+
+int kv_list_remove(struct kv_list *list, struct kv_node *node)
+{
+	struct kv_node *prev = NULL;
+	if (node == list->first) {
+		list->first = node->next;
+	} else {
+		kv_foreach(prev, list) {
+			if (prev->next == node) {
+				prev->next = node->next;
+				goto cleanup;
+			}
+		}
+		return -1;
+	}
+cleanup:
+	if (node == list->last)
+		list->last = prev;
+	return 0;
+}
