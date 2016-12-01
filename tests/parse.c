@@ -22,13 +22,13 @@ static const char *test =
 
 int main(int argc, char *argv[])
 {
-	struct kv_parser parser;
+	struct kv_parser *parser;
 
-	kv_init(&parser);
-	if (kv_parse(&parser, test) != 0)
+	parser = kv_new();
+	if (kv_parse(parser, test) != 0)
 		return -1;
-	kv_dump(&parser);
-	kv_destroy(&parser);
+	kv_dump(parser);
+	kv_destroy(parser);
 	return 0;
 }
 
