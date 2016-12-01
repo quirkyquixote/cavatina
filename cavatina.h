@@ -90,6 +90,18 @@ static inline struct kv_str kv_str(const char *str)
  */
 int kv_strcmp(struct kv_str s1, struct kv_str s2);
 /*
+ * Get values for the given group and key
+ */
+struct kv_list *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_str key);
+/*
+ * Add value for the given group and key
+ */
+int kv_add(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val);
+/*
+ * Remove value from the given group and key
+ */
+int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val);
+/*
  * Get group named name, or NULL
  */
 struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str name);

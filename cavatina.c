@@ -95,6 +95,49 @@ int kv_strcmp(struct kv_str s1, struct kv_str s2)
 	return strncmp(s1.begin, s2.begin, l1);
 }
 
+struct kv_list *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_str key)
+{
+	struct kv_group *g;
+	struct kv_key *k;
+	g = kv_get_group(parser, group);
+	if (g == NULL)
+		return NULL;
+	k = kv_get_key(g, key);
+	if (k == NULL)
+		return NULL;
+	return &k->vals;
+}
+
+int kv_add(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val)
+{
+	struct kv_group *g;
+	struct kv_key *k;
+	struct kv_val *v;
+	g = kv_add_group(parser, group);
+	if (g == NULL)
+		return -1;
+	k = kv_add_key(g, key);
+	if (k == NULL)
+		return -1;
+	v = kv_add_val(k, val);
+	if (v == NULL)
+		return -1;
+	return 0;
+}
+
+int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val)
+{
+	struct kv_group *g;
+	struct kv_key *k;
+	g = kv_get_group(parser, group);
+	if (g == NULL)
+		return -1;
+	k = kv_get_key(g, key);
+	if (k == NULL)
+		return -1;
+	return kv_remove_val_by_name(k, val);
+}
+
 struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str name)
 {
 	struct kv_node *iter;
