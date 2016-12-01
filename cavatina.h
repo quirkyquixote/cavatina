@@ -198,7 +198,25 @@ static inline int kv_list_remove(struct kv_list *list, struct kv_node *node)
 /*
  * Iterate on list
  */
-#define kv_list_foreach(iter,list)\
+#define kv_foreach(iter,list)\
 	for ((iter) = (list)->first; (iter) != NULL; (iter) = (iter)->next)
+/*
+ * Iterate on groups
+ */
+#define kv_foreach_group(iter,parser)\
+	for ((iter) = (void *)(parser)->groups.first; (iter) != NULL;\
+			(iter) = (void *)(iter)->node.next)
+/*
+ * Iterate on keys
+ */
+#define kv_foreach_key(iter,parser)\
+	for ((iter) = (void *)(parser)->keys.first; (iter) != NULL;\
+			(iter) = (void *)(iter)->node.next)
+/*
+ * Iterate on values
+ */
+#define kv_foreach_val(iter,parser)\
+	for ((iter) = (void *)(parser)->vals.first; (iter) != NULL;\
+			(iter) = (void *)(iter)->node.next)
 
 #endif

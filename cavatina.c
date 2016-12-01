@@ -140,10 +140,8 @@ int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key, 
 
 struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str name)
 {
-	struct kv_node *iter;
 	struct kv_group *group;
-	kv_list_foreach(iter, &parser->groups) {
-		group = (void *)iter;
+	kv_foreach_group(group, parser) {
 		if (kv_strcmp(group->name, name) == 0)
 			return group;
 	}
@@ -181,10 +179,8 @@ int kv_remove_group_by_name(struct kv_parser *parser, struct kv_str name)
 
 struct kv_key *kv_get_key(struct kv_group *group, struct kv_str name)
 {
-	struct kv_node *iter;
 	struct kv_key *key;
-	kv_list_foreach(iter, &group->keys) {
-		key = (void *)iter;
+	kv_foreach_key(key, group) {
 		if (kv_strcmp(key->name, name) == 0)
 			return key;
 	}
@@ -222,10 +218,8 @@ int kv_remove_key_by_name(struct kv_group *group, struct kv_str name)
 
 struct kv_val *kv_get_val(struct kv_key *key, struct kv_str name)
 {
-	struct kv_node *iter;
 	struct kv_val *val;
-	kv_list_foreach(iter, &key->vals) {
-		val = (void *)iter;
+	kv_foreach_val(val, key) {
 		if (kv_strcmp(val->name, name) == 0)
 			return val;
 	}
@@ -326,22 +320,18 @@ int kv_parse_val(struct kv_parser *parser, const char **buf)
 
 void kv_dump(struct kv_parser *parser)
 {
-	struct kv_node *group_iter, *key_iter, *val_iter;
 	struct kv_group *group;
 	struct kv_key *key;
 	struct kv_val *val;
 
-	kv_list_foreach(group_iter, &parser->groups) {
-		group = (void *)group_iter;
+	kv_foreach_group(group, parser) {
 		putchar('\n');
 		putchar('[');
 		kv_dump_str(group->name);
 		putchar(']');
 		putchar('\n');
-		kv_list_foreach(key_iter, &group->keys) {
-			key = (void *)key_iter;
-			kv_list_foreach(val_iter, &key->vals) {
-				val = (void *)val_iter;
+		kv_foreach_key(key, group) {
+			kv_foreach_val(val, key) {
 				kv_dump_str(key->name);
 				putchar('=');
 				kv_dump_str(val->name);
