@@ -92,7 +92,7 @@ int kv_strcmp(struct kv_str s1, struct kv_str s2);
 /*
  * Get values for the given group and key
  */
-struct kv_list *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_str key);
+struct kv_key *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_str key);
 /*
  * Add value for the given group and key
  */

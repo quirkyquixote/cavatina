@@ -95,17 +95,14 @@ int kv_strcmp(struct kv_str s1, struct kv_str s2)
 	return strncmp(s1.begin, s2.begin, l1);
 }
 
-struct kv_list *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_str key)
+struct kv_key *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_str key)
 {
 	struct kv_group *g;
 	struct kv_key *k;
 	g = kv_get_group(parser, group);
 	if (g == NULL)
 		return NULL;
-	k = kv_get_key(g, key);
-	if (k == NULL)
-		return NULL;
-	return &k->vals;
+	return kv_get_key(g, key);
 }
 
 int kv_add(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val)
