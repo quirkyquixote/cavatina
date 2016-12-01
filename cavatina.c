@@ -127,6 +127,15 @@ int kv_remove_group(struct kv_parser *parser, struct kv_group *group)
 	return 0;
 }
 
+int kv_remove_group_by_name(struct kv_parser *parser, struct kv_str name)
+{
+	struct kv_group *group;
+	group = kv_get_group(parser, name);
+	if (group == NULL)
+		return -1;
+	return kv_remove_group(parser, group);
+}
+
 struct kv_key *kv_get_key(struct kv_group *group, struct kv_str name)
 {
 	struct kv_node *iter;
@@ -159,6 +168,15 @@ int kv_remove_key(struct kv_group *group, struct kv_key *key)
 	return 0;
 }
 
+int kv_remove_key_by_name(struct kv_group *group, struct kv_str name)
+{
+	struct kv_key *key;
+	key = kv_get_key(group, name);
+	if (key == NULL)
+		return -1;
+	return kv_remove_key(group, key);
+}
+
 struct kv_val *kv_get_val(struct kv_key *key, struct kv_str name)
 {
 	struct kv_node *iter;
@@ -189,6 +207,15 @@ int kv_remove_val(struct kv_key *key, struct kv_val *val)
 		return -1;
 	kv_destroy_val(val);
 	return 0;
+}
+
+int kv_remove_val_by_name(struct kv_key *key, struct kv_str name)
+{
+	struct kv_val *val;
+	val = kv_get_val(key, name);
+	if (val == NULL)
+		return -1;
+	return kv_remove_val(key, val);
 }
 
 int kv_parse_group(struct kv_parser *parser, const char **buf)

@@ -136,7 +136,7 @@ int kv_remove_val(struct kv_key *key, struct kv_val *val);
 /*
  * Remove val by name.
  */
-int kv_remove_val_by_name(struct kv_parser *parser, struct kv_str name);
+int kv_remove_val_by_name(struct kv_key *key, struct kv_str name);
 /*
  * Dump all parsed data to stdout
  */
