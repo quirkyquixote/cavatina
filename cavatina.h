@@ -98,9 +98,9 @@ struct kv_key *kv_get(struct kv_parser *parser, struct kv_str group, struct kv_s
  */
 int kv_add(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val);
 /*
- * Remove value from the given group and key
+ * Remove key from group
  */
-int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val);
+int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key);
 /*
  * Get group named name, or NULL
  */

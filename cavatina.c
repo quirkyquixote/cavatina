@@ -122,17 +122,13 @@ int kv_add(struct kv_parser *parser, struct kv_str group, struct kv_str key, str
 	return 0;
 }
 
-int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key, struct kv_str val)
+int kv_remove(struct kv_parser *parser, struct kv_str group, struct kv_str key)
 {
 	struct kv_group *g;
-	struct kv_key *k;
 	g = kv_get_group(parser, group);
 	if (g == NULL)
 		return -1;
-	k = kv_get_key(g, key);
-	if (k == NULL)
-		return -1;
-	return kv_remove_val_by_name(k, val);
+	return kv_remove_key_by_name(g, key);
 }
 
 struct kv_group *kv_get_group(struct kv_parser *parser, struct kv_str name)
