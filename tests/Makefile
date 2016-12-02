@@ -1,6 +1,7 @@
 
 include ../config.mk
 
+OBJS += build.o
 OBJS += parse.o
 OBJS += list.o
 
@@ -19,6 +20,7 @@ clean:
 	$(RM) $(DEPS)
 	$(RM) $(LOGS)
 
+build: build.o ../cavatina.o
 parse: parse.o ../cavatina.o
 list: list.o ../cavatina.o
 
